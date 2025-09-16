@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Host a Group - GroupTalk</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #7f53ac, #647dee);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      color: white;
+    }
+
+    .host-card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      padding: 40px;
+      border-radius: 25px;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      animation: fadeIn 1s ease;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      margin-bottom: 15px;
+    }
+
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+      color: #e0e0e0;
+    }
+
+    input {
+      width: 90%;
+      padding: 15px;
+      margin-bottom: 25px;
+      border-radius: 15px;
+      border: none;
+      font-size: 1rem;
+      outline: none;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+
+    input::placeholder {
+      color: #ccc;
+    }
+
+    .create-btn {
+      background: #00e3ae;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s ease;
+      color: #222;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .create-btn:hover {
+      transform: scale(1.05);
+      background: #00c49a;
+    }
+
+    .generated-code {
+      margin-top: 30px;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 20px;
+      border-radius: 20px;
+      font-size: 1.1rem;
+      animation: pulse 2s infinite;
+      box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.3);
+      word-break: break-word;
+    }
+
+    .chat-btn {
+      margin-top: 20px;
+      background-color: #fff;
+      color: #333;
+      padding: 12px 24px;
+      border: none;
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 25px;
+      cursor: pointer;
+    }
+
+    .chat-btn:hover {
+      background-color: #eee;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 10px rgba(255, 255, 255, 0.1); }
+      50% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.4); }
+      100% { box-shadow: 0 0 10px rgba(255, 255, 255, 0.1); }
+    }
+
+    .back-link {
+      display: block;
+      margin-top: 20px;
+      color: #ccc;
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    .end-btn {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      background-color: #ff4d6d;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      border-radius: 30px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      cursor: pointer;
+      transition: 0.3s ease;
+      z-index: 999;
+    }
+
+    .end-btn:hover {
+      background-color: #ff1e47;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="host-card">
+    <h1>🎙️ Host a New Group</h1>
+    <p>Enter a group name and generate a private invite link or code</p>
+
+    <input type="text" placeholder="Enter group name" id="groupName">
+    <br>
+    <button class="create-btn" onclick="generateGroup()">Create Group</button>
+
+    <div id="codeBox" class="generated-code" style="display: none;">
+      🔗 Invite Code: <span id="groupCode">Loading...</span><br><br>
+      📎 Link: <span id="inviteLink"></span>
+      <br>
+      <button class="chat-btn" onclick="window.location.href='public/chat.html'">Go to Chat</button>
+
+    </div>
+
+    <a href="index.html" class="back-link">← Back to Home</a>
+  </div>
+
+  <script type="module" src="firebase.js"></script>
+  <script type="module" src="host.js"></script>
+
+</body>
+</html>

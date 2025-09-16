@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>GroupTalk Chat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Emoji Picker -->
+  <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@1.6.2/index.js"></script>
+
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #667eea, #764ba2);
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-container {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-header {
+  display: inline-block;
+  padding: 15px 20px;
+  background: #4b3fa6;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-align: center;
+  margin: 15px auto;
+  border-radius: 12px;
+  max-width: 90%;
+  user-select: text;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  word-break: break-word;
+  position: relative;
+}
+    .chat-title {
+      flex-grow: 1;
+      text-align: left;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .header-buttons {
+      display: flex;
+      gap: 10px;
+      flex-shrink: 0;
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .end-btn {
+      padding: 8px 14px;
+      background-color: #ff4d6d;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .end-btn:hover {
+      background-color: #ff1e47;
+    }
+
+    #darkModeToggle {
+      position: absolute;
+      right: -200px;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: #333;
+    }
+
+    .chat-box {
+  flex-grow: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-sizing: border-box;
+}
+
+    .message {
+      background: #01baff;
+      border-radius: 16px;
+      padding: 15px;
+      margin: 15px 0;
+      position: relative;
+      max-width: 80%;
+      font-family: 'Roboto', sans-serif;
+      border: 1px solid #01baff;
+      box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.1);
+      color: #fff;
+      animation: fadeInMessage 0.3s ease-out;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+
+    .message.own-message {
+      background: #01baff;
+      color: white;
+      margin-left: auto;
+    }
+
+    .message .name {
+      font-size: 1.15em;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .message .message-text {
+      font-size: 1em;
+      color: #fff;
+      line-height: 1.6;
+    }
+
+    .message .message-text a {
+      color: #e0faff;
+      text-decoration: none;
+    }
+
+    .message .message-text a:hover {
+      text-decoration: underline;
+    }
+
+    .message img, .message video, .message audio {
+      max-width: 100%;
+      border-radius: 12px;
+      margin-top: 12px;
+    }
+
+    .chat-input {
+  margin-top: 0; /* Reset margin-top */
+  display: flex;
+  padding: 12px;
+  background: #fff;
+  border-top: 1px solid #ccc;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  top: 20px; /* Move the input field down */
+}
+    #messageInput {
+      flex-grow: 1;
+      padding: 8px 14px;
+      font-size: 0.95rem;
+      border-radius: 16px;
+      border: 1px solid #ccc;
+      outline: none;
+      resize: none;
+      overflow: hidden;
+      min-height: 36px;
+      max-height: 120px;
+      line-height: 1.4;
+      font-family: 'Segoe UI', sans-serif;
+      box-sizing: border-box;
+    }
+
+    button {
+      padding: 10px 14px;
+      border: none;
+      background: #4b3fa6;
+      color: white;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s ease;
+    }
+
+    button:hover {
+      background: #372d79;
+    }
+
+    #fileInput {
+      display: none;
+    }
+
+    .mic-btn {
+      background-color: #ffffff;
+      border: 2px solid #ccc;
+      border-radius: 50px;
+      padding: 10px 16px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .mic-btn.recording {
+      background-color: red;
+      color: white;
+      animation: pulse 1s infinite;
+    }
+
+    .recording-indicator {
+      margin-left: 10px;
+      font-weight: bold;
+      color: red;
+      animation: blink 1s steps(2, start) infinite;
+    }
+
+    @keyframes blink {
+      to { visibility: hidden; }
+    }
+
+    @keyframes pulse {
+      0%   { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.5); }
+      70%  { box-shadow: 0 0 0 20px rgba(255, 0, 0, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); }
+    }
+
+    body.dark-mode {
+      background: #1e1e1e;
+      color: white;
+    }
+
+    body.dark-mode .chat-header {
+      background: #2e2e2e;
+    }
+
+    body.dark-mode .chat-input {
+      background: #333;
+    }
+
+    body.dark-mode #messageInput {
+      background-color: #444;
+      color: white;
+      border-color: #666;
+    }
+
+    body.dark-mode .message {
+      background: #2a2a2a;
+      border-color: #555;
+    }
+
+    body.dark-mode .message.own-message {
+      background: #3a3a3a;
+      border-color: #555;
+    }
+
+    @media (max-width: 600px) {
+      .chat-header {
+        font-size: 1rem;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .header-buttons {
+        margin-top: 8px;
+        position: static;
+        transform: none;
+        right: auto;
+        top: auto;
+      }
+    }
+
+    #emojiPicker {
+      position: fixed;
+      bottom: 100px;
+      left: 20px;
+      z-index: 9999;
+      display: none;
+      background: white;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      border-radius: 12px;
+    }
+
+    .emoji-btn {
+      font-size: 22px;
+      background: #fff;
+      border: 2px solid #ccc;
+      border-radius: 50%;
+      cursor: pointer;
+      padding: 8px;
+      transition: background 0.3s ease;
+    }
+
+    .emoji-btn:hover {
+      background: #f1f1f1;
+    }
+
+    body.dark-mode #emojiPicker {
+      background-color: #333;
+      color: white;
+    }
+
+    #noMessages {
+      text-align: center;
+      color: #ddd;
+      font-style: italic;
+      margin-top: 40px;
+      font-size: 1.1em;
+    }
+
+    .menu {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 1000;
+    }
+
+    .menu-btn {
+      background: none;
+      border: none;
+      font-size: 28px;
+      color: white;
+      cursor: pointer;
+      padding: 8px;
+      transition: transform 0.2s ease;
+    }
+
+    .menu-options {
+      display: none;
+      position: absolute;
+      top: 40px;
+      left: 0;
+      padding: 0;
+      background: transparent !important;
+      box-shadow: none;
+    }
+
+    .menu-options.show {
+      display: block;
+    }
+
+    #darkModeOption {
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: white;
+      padding: 0;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    #darkModeOption:hover {
+      transform: scale(1.1);
+      opacity: 0.8;
+    }
+    #imageModal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease-in-out;
+  cursor: zoom-out;
+}
+
+#modalImage {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 16px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+  animation: zoomIn 0.3s ease-in-out;
+  transition: transform 0.3s ease;
+}
+
+/* Overlay Background */
+.popup-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: none; /* Show with JS */
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+/* Popup Box */
+.popup {
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 15px;
+  width: 320px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  animation: fadeInUp 0.3s ease-out;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Heading */
+.popup h3 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  color: #222;
+}
+
+/* Paragraph */
+.popup p {
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+/* Buttons */
+.popup button {
+  background: linear-gradient(135deg, #4a00e0, #8e2de2);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-top: 8px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.popup button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Cancel Button Special */
+.popup button.cancel {
+  background: #bbb;
+  color: #fff;
+}
+
+.popup button.cancel:hover {
+  background: #999;
+}
+
+/* Dropdown */
+.popup select {
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-top: 8px;
+  width: 100%;
+  font-size: 0.9rem;
+}
+
+/* Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* Close (Exit) Button */
+.popup .close-btn {
+  position: absolute;
+  top: 10px;  /* Top se distance */
+  right: 10px; /* Right se distance */
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #555;
+}
+
+.popup .close-btn:hover {
+  color: #000;
+}
+
+.exit-btn-fixed {
+  position: fixed;
+  top: 15px;         /* screen ke top se */
+  right: 15px;       /* screen ke right se */
+  background: linear-gradient(135deg, #4a00e0, #8e2de2);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: all 0.2s ease-in-out;
+  z-index: 1000; /* popup ke upar rahe */
+}
+
+.exit-btn-fixed:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+}
+
+
+
+
+
+  </style>
+</head>
+<body>
+
+  <div id="menu" class="menu">
+    <button id="menuBtn">⋮</button>
+    <div id="menuOptions" class="menu-options">
+      <button id="darkModeOption">🌙</button>
+      <!-- <li id="endLeaveGroupOption">🚪 Leave Group</li> -->
+    </div>
+  </div>
+
+  
+  
+  <div class="chat-header">
+    <div class="chat-title" id="chatHeader">GroupTalk</div>
+    <div class="header-buttons">
+    </div>
+  </div>
+
+  <!-- EXIT BUTTON IN TOP-RIGHT -->
+<button id="exitBtn" class="exit-btn-fixed">Exit</button>
+
+<!-- Host Leave Popup -->
+<div id="hostLeavePopup" class="popup-overlay">
+  <div class="popup">
+    <h3>Choose an Option</h3>
+    <p>Do you want to end the group or transfer host?</p>
+    <button id="endGroupBtn" class="end-group">End Group</button>
+    <br><br>
+    <label for="memberSelect"><strong>Transfer Host to:</strong></label>
+    <select id="memberSelect" style="width:100%; padding:8px; margin-top:5px;"></select>
+    <button id="transferHostBtn" class="transfer-host" style="margin-top:10px;">Transfer Host</button>
+    <br>
+    <button id="cancelLeaveBtn" class="cancel">Cancel</button>
+  </div>
+</div>
+
+
+
+
+
+
+
+  <!-- Chat Messages -->
+  <div class="chat-box" id="chatBox">
+    <div id="noMessages">No messages yet</div>
+  </div>
+
+  <!-- Chat Input -->
+  <div class="chat-input">
+    <input type="file" id="fileInput" accept="image/*,video/*,audio/*" hidden />
+    <textarea id="messageInput" placeholder="Type a message..." rows="1"></textarea>
+
+    <button id="sendBtn">ᯓ➤</button>
+    <button onclick="document.getElementById('fileInput').click()">📎</button>
+    <button id="emojiBtn" class="emoji-btn">😊</button>
+    <button id="voiceBtn" class="mic-btn">🎙️</button>
+    <span id="recordingIndicator" class="recording-indicator" style="display: none;">🔴 Recording...</span>
+  </div>
+
+  <!-- Emoji Picker -->
+  <emoji-picker id="emojiPicker"></emoji-picker>
+
+  <!-- Modal Image View (Optional) -->
+  <div id="imageModal">
+    <img id="modalImage" />
+  </div>
+  <!-- Firebase SDK + App Logic -->
+  <script type="module" src="firebase.js"></script>
+  <script type="module" src="chat.js"></script>
+  
+</body>
+</html>

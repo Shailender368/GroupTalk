@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login - GroupTalk</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: white;
+    }
+    .login-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      position: relative;
+    }
+    input, select {
+      width: 90%;
+      padding: 12px; 
+      margin: 12px 0;
+      border-radius: 12px;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+    }
+    /* button {
+      background: #00e3ae;
+      color: #000;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 10px;
+      google-btn {
+      background: #fff;
+      color: #000;
+      margin-top: 15px;
+    } */
+
+    button {
+  background: #00e3ae;
+  color: #000;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+button.google-btn {
+  background: #fff;
+  color: #000;
+  margin-top: 15px;
+}
+
+    a {
+      color: #ccc;
+      font-size: 0.9rem;
+      display: block;      
+      margin-top: 15px;
+      text-decoration: none;
+    }
+    .spinner-container { 
+      display: none;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+    }
+    .circle-spinner {
+      width: 28px;
+      height: 28px;
+      border: 3px dotted rgba(255, 255, 255, 0.2);
+      border-top: 3px dotted #00e3ae;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      box-shadow: 0 0 6px rgba(0, 227, 174, 0.5);
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); box-shadow: 0 0 6px rgba(0, 227, 174, 0.3); }
+      50% { box-shadow: 0 0 10px rgba(0, 227, 174, 0.7); }
+      100% { transform: rotate(360deg); box-shadow: 0 0 6px rgba(0, 227, 174, 0.3); }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-card">
+    <h2>Login</h2>
+    
+    <!-- Email & Password Inputs -->
+    <input type="email" id="loginEmail" placeholder="Email" />
+    <input type="password" id="loginPassword" placeholder="Password" />
+    
+   
+    
+    <!-- Buttons -->
+    <button onclick="loginUser()">Login</button>
+    <button id="googleBtn" class="google-btn" onclick="googleLogin()">Login with Google</button>
+
+    <!-- Spinner -->
+    <div id="spinner" class="spinner-container">
+      <div class="circle-spinner"></div>
+    </div>
+
+    <a href="signup.html">Don't have an account? Sign up</a>
+  </div>
+
+  <!-- Auth Logic -->
+  <script type="module" src="auth.js"></script>
+</body>
+</html>

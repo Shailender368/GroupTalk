@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GroupTalk</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(12px);
+      border-radius: 25px;
+      padding: 50px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+      text-align: center;
+      max-width: 700px;
+      width: 90%;
+      z-index: 10;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    h1 {
+      font-size: 3.5rem;
+      margin-bottom: 10px;
+      animation: slideInDown 1s ease;
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      color: #f0f0f0;
+    }
+
+    .feature-icons {
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      margin-bottom: 30px;
+    }
+
+    .icon {
+      font-size: 2.5rem;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .icon:nth-child(1) { animation-delay: 0s; }
+    .icon:nth-child(2) { animation-delay: 1s; }
+    .icon:nth-child(3) { animation-delay: 2s; }
+    .icon:nth-child(4) { animation-delay: 3s; }
+
+    @keyframes float {
+      0%   { transform: translateY(0); opacity: 0.95; }
+      50%  { transform: translateY(-15px); opacity: 1; }
+      100% { transform: translateY(0); opacity: 0.95; }
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .btn {
+      padding: 14px 28px;
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 30px;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+      text-decoration: none;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .btn.host {
+      background: #00c9ff;
+      color: #fff;
+    }
+
+    .btn.member {
+      background: #92fe9d;
+      color: #333;
+    }
+
+    .btn:hover {
+      transform: scale(1.08);
+    }
+
+    .wave {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 150px;
+      background: url('https://i.imgur.com/ybL0aZ1.png') repeat-x;
+      animation: wave 10s linear infinite;
+      opacity: 0.2;
+      z-index: 1;
+    }
+
+    @keyframes wave {
+      from { background-position-x: 0; }
+      to   { background-position-x: 1000px; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes slideInDown {
+      from { transform: translateY(-30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="glass-card">
+    <h1>🚀 EchoRoom</h1>
+    <p>Create private rooms to chat, share media & voice instantly</p>
+
+    <!-- Floating Emoji Stickers -->
+    <div class="feature-icons">
+      <div class="icon">💬</div>
+      <div class="icon">🎧</div>
+      <div class="icon">📸</div>
+      <div class="icon">📩</div>
+    </div>
+
+    <!-- Host & Member Buttons -->
+    <div class="buttons">
+      <button onclick="selectRole('host')" class="btn host">Join as Host</button>
+      <button onclick="selectRole('member')" class="btn member">Join as Member</button>
+    </div>
+  </div>
+
+  <div class="wave"></div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBZC4VwXVJvvb45Yl2KmbIqw_f-XDJ-_xY",
+      authDomain: "grouptalk-c13bd.firebaseapp.com",
+      projectId: "grouptalk-c13bd",
+      storageBucket: "grouptalk-c13bd.appspot.com",
+      messagingSenderId: "756756686074",
+      appId: "1:756756686074:web:34fc9708b8e91f62ddd543"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // ✅ Check if user is logged in
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        alert("You must be logged in. Redirecting...");
+        window.location.href = "login.html";
+      }
+    });
+
+    // 🔄 Handle Host/Member Role Selection
+    window.selectRole = function(role) {
+      localStorage.setItem("role", role);
+      if (role === "host") {
+        window.location.href = "host.html";
+      } else if (role === "member") {
+        window.location.href = "member.html";
+      }
+    };
+  </script>
+</body>
+</html>

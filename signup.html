@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Signup - GroupTalk</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: white;
+    }
+    .signup-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+    input {
+      width: 90%;
+      padding: 12px;
+      margin: 12px 0;
+      border-radius: 12px;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+    }
+    button {
+      background: #00e3ae;
+      color: #000;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    a {
+      color: #ccc;
+      font-size: 0.9rem;
+      display: block;
+      margin-top: 15px;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="signup-card">
+    <h2>Signup</h2>
+    <input type="email" id="signupEmail" placeholder="Email" />
+    <input type="password" id="signupPassword" placeholder="Password" />
+    <button onclick="signupUser()">Sign Up</button>
+    <a href="login.html">Already have an account? Login</a>
+  </div>
+
+  <script type="module" src="auth.js"></script>
+
+  <script>
+    const role = sessionStorage.getItem("userRole");
+    if (!role) {
+      alert("Please select a role first.");
+      window.location.href = "front.html";
+    }
+  </script>
+  
+
+</body>
+</html>

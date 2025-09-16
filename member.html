@@ -1,0 +1,78 @@
+<!-- member.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Join as Member - GroupTalk</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #7f53ac, #647dee);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
+    .member-card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      padding: 40px;
+      border-radius: 25px;
+      width: 90%;
+      max-width: 600px;
+      text-align: center;
+    }
+
+    input {
+      width: 90%;
+      padding: 15px;
+      margin-bottom: 25px;
+      border-radius: 15px;
+      border: none;
+      font-size: 1rem;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+
+    .join-btn {
+      background: #ffdd59;
+      padding: 14px 32px;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+
+    .back-link {
+      display: block;
+      margin-top: 20px;
+      color: #ccc;
+      text-decoration: none;
+    }
+
+    #errorMessage {
+      color: #ff6b6b;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="member-card">
+    <h1>🎧 Join a Group</h1>
+    <p>Enter the invite link or code shared by the host</p>
+
+    <input type="text" placeholder="Enter group code or link" id="groupCodeInput">
+    <br>
+    <button class="join-btn" onclick="joinGroup()">Join Group</button>
+    <a href="index.html" class="back-link">← Back to Home</a>
+    <p id="errorMessage"></p>
+  </div>
+
+  <script type="module" src="member.js"></script>
+</body>
+</html>
+
